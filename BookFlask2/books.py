@@ -44,16 +44,11 @@ def search():
         
         titles = SQL on conn """select title, author from books where title = '"""query"""'"""
         authors = SQL on conn """select title, author from books where author = '"""query"""'"""
-        title_dict = {}
-        num = 0
-        for j in titles :
-            title_dict.update({'Key' + str(num) : {'title' : j[0], 'author' : j[1]}})
-            num += 1
-        author_dict = {}
-        num = 0
-        for j in authors :
-            author_dict.update({'Key' + str(num) : {'title' : j[0], 'author' : j[1]}})
-            num += 1
+        
+	#Convert the iterables returned by the database query into two-dimensional dictionaries
+	title_dict = convert_to_dict(titles)
+        author_dict = convert_to_dict(authors)
+
 
         # title_dict = {}
         # author_dict = {}
@@ -64,6 +59,17 @@ def search():
 
     else:
         return render_template('search.html', posting=False)
+
+
+#Convert the iterable returned by the database query into a two-dimensional dictionary
+def convert_to_dict(query_result):
+	result_dict = {}
+        num = 0
+        for i in query_result :
+            result_dict.update({'Key' + str(num) : {'title' : i[0], 'author' : i[1]}})
+            num += 1
+	return result_dict
+
 
 #The page to add a book to the database
 @app.route('/add/', methods=['GET', 'POST'])
