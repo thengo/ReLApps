@@ -73,18 +73,7 @@
         {% for key,result in name_results.iteritems() %}
           <a href="/detail/{{result['name']}}/">{{result['name']}}/</br></a>
         {%endfor%}
-        {% for key, result in phone_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['phone']}}</br></a>
-        {%endfor%}
-        {% for key,result in pickup_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['pickup']}}/</br></a>
-        {%endfor%}
-        {% for key,result in destination_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['destination']}}/</br></a>
-        {%endfor%}
-        {% for key,result in time_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['time']}}/</br></a>
-        {%endfor%}
+
        {% endif %}
       {% endif %}
 

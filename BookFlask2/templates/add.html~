@@ -40,7 +40,7 @@
            <li class= "active"><a href="/">Home</a></li>
            <li class= "active"><a href="/search/">Search</a></li>
            <li class= "active"><a href="/add/">Add</a></li>
-           <li class= "active"><a href="/featured/">Claim</a></li>
+           <li class= "active"><a href="/claim/">Claim</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -51,42 +51,34 @@
     <div class="jumbotron">
       <div class="container">
        <div class="row">
-        <h1>Search The Database:</h1>
+        <h1>Add a Ride Request to the Database:</h1>
        </div>
        <div class="row">
-       <div class="row">
-        <form method="post" class="form" action="/search/">
-         <input type="text" name="query">
+        <div class="well well-sm">
+        <form method="post" class="form" action="/add/">
+         <input type="text" name="name" placeholder="Name">
+         <input type="tel" name="phone" placeholder="Phone Number">
+         <input type="text" name="pickup" placeholder="Pick Up Location">
+         <input type="text" name="destination" placeholder="Destination">
+		 <input type="datetime-local" name="time" placeholder="Date and Time">
          <input type="submit" value="Submit">
         <form>
-
        </div>
+       {% if alert == "success" %}
+       <div class ="alert alert-success role="alert">
+        You have successfully added to the database</div>
+       {% elif alert == "exists" %}
+       <div class ="alert alert-danger role="alert">
+        A Ride Request with that user and time already exists in the database
+        </div>
+        {% elif alert == "required" %}
+       <div class ="alert alert-danger role="alert">
+        All of the above fields are required
+        </div> 
+       {% endif %}
        </div>
       </div>
-     </div>
 
-      {%if posting %}
-       {% if no_results %}
-        <h3>No results for <i>'{{query}}'</i></h3>
-       {% else %}
-        <h3>Results for <i>'{{query}}'</i>:</h3>
-        {% for key,result in name_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['name']}}/</br></a>
-        {%endfor%}
-        {% for key, result in phone_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['phone']}}</br></a>
-        {%endfor%}
-        {% for key,result in pickup_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['pickup']}}/</br></a>
-        {%endfor%}
-        {% for key,result in destination_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['destination']}}/</br></a>
-        {%endfor%}
-        {% for key,result in time_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['time']}}/</br></a>
-        {%endfor%}
-       {% endif %}
-      {% endif %}
 
     <hr>
 

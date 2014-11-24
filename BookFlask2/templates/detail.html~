@@ -10,10 +10,10 @@
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../bootstrap3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap3/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../bootstrap3/css/custom_css.css" rel="stylesheet">
+    <link href="bootstrap3/css/custom_css.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -33,14 +33,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Taxi Search</a>
+          <a class="navbar-brand" href="/">Book Search</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
            <li class= "active"><a href="/">Home</a></li>
            <li class= "active"><a href="/search/">Search</a></li>
            <li class= "active"><a href="/add/">Add</a></li>
-           <li class= "active"><a href="/featured/">Claim</a></li>
+           <li class= "active"><a href="/featured/">Featured</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -51,44 +51,39 @@
     <div class="jumbotron">
       <div class="container">
        <div class="row">
-        <h1>Search The Database:</h1>
+       <div class="col-md-6">
+        <h1>{{result['title']}}</br>By {{result['author']}}</br></h1>
+        <h2>Genre:{{result['genre']}}</h2>
        </div>
-       <div class="row">
-       <div class="row">
-        <form method="post" class="form" action="/search/">
-         <input type="text" name="query">
-         <input type="submit" value="Submit">
-        <form>
-
-       </div>
+        <div class="media">
+         <img class="media-object" src="/static/images/{{result['image']}}/">
+         <caption>Image from {{result['image_src']}}</caption>
        </div>
       </div>
-     </div>
+    </div>
+    </div>
+    <div class="bottom">
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-6">
+          <h2>About</h2>
+          <p>{{result['description']}}</p>
+        </div>
+        <div class="col-md-6">
+         <div class="panel panel-default">
+          <div class="panel-heading">
+           <h3 class="panel-title">User Comments/Reviews</h3>
+          </div>
+         <div class="panel-body">
+           Nothing here yet
+         </div>
+         </div>
+        </div>
+      </div>
+      </div>
 
-      {%if posting %}
-       {% if no_results %}
-        <h3>No results for <i>'{{query}}'</i></h3>
-       {% else %}
-        <h3>Results for <i>'{{query}}'</i>:</h3>
-        {% for key,result in name_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['name']}}/</br></a>
-        {%endfor%}
-        {% for key, result in phone_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['phone']}}</br></a>
-        {%endfor%}
-        {% for key,result in pickup_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['pickup']}}/</br></a>
-        {%endfor%}
-        {% for key,result in destination_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['destination']}}/</br></a>
-        {%endfor%}
-        {% for key,result in time_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['time']}}/</br></a>
-        {%endfor%}
-       {% endif %}
-      {% endif %}
-
-    <hr>
+      <hr>
 
     </div> <!-- /container -->
 
@@ -97,8 +92,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="../bootstrap3/js/bootstrap.min.js"></script>
+    <script src="bootstrap3/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../bootstrap3/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="bootstrap3/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
