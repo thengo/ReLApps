@@ -40,7 +40,7 @@
            <li class= "active"><a href="/">Home</a></li>
            <li class= "active"><a href="/search/">Search</a></li>
            <li class= "active"><a href="/add/">Add</a></li>
-           <li class= "active"><a href="/featured/">Claim</a></li>
+           <li class= "active"><a href="/unclaimed_rides/">Claim Ride</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -71,23 +71,11 @@
        {% else %}
         <h3>Results for <i>'{{query}}'</i>:</h3>
         {% for key,result in name_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['name']}}/</br></a>
+          <a href="/detail/{{result['name']}}/{{result['time']}}">{{result['name']}}/{{result['time']}}</br></a>
         {%endfor%}
-        {% for key, result in phone_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['phone']}}</br></a>
-        {%endfor%}
-        {% for key,result in pickup_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['pickup']}}/</br></a>
-        {%endfor%}
-        {% for key,result in destination_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['destination']}}/</br></a>
-        {%endfor%}
-        {% for key,result in time_results.iteritems() %}
-          <a href="/detail/{{result['name']}}/">{{result['time']}}/</br></a>
-        {%endfor%}
+       
        {% endif %}
       {% endif %}
-
     <hr>
 
     </div> <!-- /container -->

@@ -40,7 +40,7 @@
            <li class= "active"><a href="/">Home</a></li>
            <li class= "active"><a href="/search/">Search</a></li>
            <li class= "active"><a href="/add/">Add</a></li>
-           <li class= "active"><a href="/featured/">Claim</a></li>
+           <li class= "active"><a href="/unclaimed_rides/">Claim Ride</a></li>
           </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -64,20 +64,12 @@
       <div class="row">
         <div class="col-md-6">
           <h2>Information</h2>
-          <p>{{result['phone']}}</p>
-          <p>{{result['pickup']}}</p>
-          <p>{{result['destination']}}</p>
-          <p>{{result['time']}}</p>
+          <p>Phone number = {{result['phone']}}</p>
+          <p>Pick up Location = {{result['pickup']}}</p>
+          <p>Destination = {{result['destination']}}</p>
+          <p>Time = {{result['time']}}</p>
+          <p>Driver name = {{result['driver']}}</p>
         </div>
-        <div class="col-md-6">
-         <div class="panel panel-default">
-          <div class="panel-heading">
-           <h3 class="panel-title">User Comments/Reviews</h3>
-          </div>
-         <div class="panel-body">
-           Nothing here yet
-         </div>
-         </div>
         </div>
       </div>
       </div>

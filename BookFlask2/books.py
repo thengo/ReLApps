@@ -14,17 +14,18 @@ def splash():
     return app.send_static_file('splash.html')
 
 #Individual information page for each book
-@app.route('/detail/<name>/', methods=['GET', 'POST'])
-def detail(name):
+@app.route('/detail/<name>/<time>/', methods=['GET', 'POST'])
+def detail(name, time):
     if request.method == 'GET':
-        cursor = SQL on conn """select * from rides where name = name"""
+        cursor = SQL on conn """select name, phone, pickup, destination, time, driver from rides where name = '"""name"""' and time = '"""time"""'"""
+
         #print "Cursor tuple is: %s" % (cursor,)
-    result_dict = {}
-    num = 0
-    for j in cursor :
-        result_dict.update({'Key' + str(num) : {'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4]}})
-        num += 1
-    #results = {field:value for field, value in cursor.items()}
+        result_dict = {}
+        num = 0
+        for j in cursor:
+            result_dict.update({'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4], 'driver' : j[5]})
+            num += 1
+            #results = {field:value for field, value in cursor.items()}
     return render_template('detail.html', result=result_dict)
 
 #serves image in image file for a particular book
@@ -33,17 +34,48 @@ def image(image):
     return app.send_static_file('images/'+image)
 
 #Claims a ride given name
-@app.route('/claim/<name>', methods=['GET', 'POST'])
-def claim(name):
-    result = SQL on conn """select * from rides where name = name"""
+@app.route('/claim/<name>/<time>/', methods=['GET', 'POST'])
+def claim(name, time):
+    cursor = SQL on conn """select name, phone, pickup, destination, time, driver from rides where name = '"""name"""' and time = '"""time"""'"""
+    already_claimed = True
+    if request.method == 'GET' :
+        pass
+        # SQL on conn """update rides set driver = 'driver_1' where name ='"""name"""' and time = '"""time"""'""" 
+        #result_dict = {}
+        #num = 0
+        #for j in cursor:
+        #    result_dict.update({'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4], 'driver' : j[5]})
+        #    num += 1
+
+    #print(cursor)
+    elif request.method == 'POST':
+        SQL on conn """update rides set driver = 'driver_1' where name ='"""name"""' and time = '"""time"""'"""    
+        cursor = SQL on conn """select name, phone, pickup, destination, time, driver from rides where name = '"""name"""' and time = '"""time"""'"""
+        print("cursor:", cursor)
+
+    cursor_2 = SQL on conn """select * from rides where name = '"""name"""' and time = '"""time"""' and driver = 'driver_1'"""
+    if len(cursor_2) == 1:
+        already_claimed = False
+
     result_dict = {}
     num = 0
-    for j in result :
-        result_dict.update({'Key' + str(num) : {'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4]}})
+    for j in cursor:
+        result_dict.update({'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4], 'driver' : j[5]})
         num += 1
-    #already_claimed = result_dict['claimed']
-    #if request.method == 'GET':
-    	#claimed_result = 
+    return render_template('claim.html', result = result_dict, already_claimed=already_claimed)
+
+@app.route('/unclaimed_rides/', methods=['GET', 'POST'])
+def unclaimed_rides():
+    if request.method == 'GET':
+        cursor = SQL on conn """select name, phone, pickup, destination, time, driver from rides where driver = 'N/A'"""
+        print(cursor)
+        result_dict = {}
+        num = 0
+        for j in cursor:
+            if j[0] != 'name':
+                result_dict.update({'Key' + str(num): {'name' : j[0], 'phone' : j[1], 'pickup' : j[2], 'destination' : j[3], 'time' : j[4]}})
+                num += 1
+        return render_template('unclaimed_rides.html', posting=False, result=result_dict)
 
 
 #The search page
@@ -56,43 +88,51 @@ def search():
         # author_cursor = books.find({'author':query})
         # genre_cursor = books.find({'genre':query})
         
-        names = SQL on conn """select name, time from rides where name = '"""query"""'"""
-        phones = SQL on conn """select name, phone, time from rides where phone = '"""query"""'"""
-        pickups = SQL on conn """select name, pickup, time from rides where pickup = '"""query"""'"""
-        destinations = SQL on conn """select name, destination, time from rides where destination = '"""query"""'"""
-        times = SQL on conn """select name, time from rides where time = '"""query"""'"""
+        cursor = SQL on conn """select name, time from rides where name = '"""query"""' or phone = '"""query"""' or pickup = '"""query"""' or destination = '"""query"""' or time = '"""query"""'"""  
+        #phones = SQL on conn """select name, phone, time from rides where phone = '"""query"""'"""
+        #pickups = SQL on conn """select name, pickup, time from rides where pickup = '"""query"""'"""
+        #destinations = SQL on conn """select name, destination, time from rides where destination = '"""query"""'"""
+        #times = SQL on conn """select name, time from rides where time = '"""query"""'"""
+        #print(cursor)
         name_dict = {}
         num = 0
-        for j in names :
-            name_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
-            num += 1
-        phone_dict = {}
-        num = 0
-        for j in phones :
-            phone_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
-            num += 1
-        pickup_dict = {}
-        num = 0
-        for j in pickups :
-            pickup_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
-            num += 1
-        destination_dict = {}
-        num = 0
-        for j in destinations :
-            destination_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
-            num += 1
-        time_dict = {}
-        num = 0
-        for j in times :
-            time_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
-            num += 1
+        for j in cursor :
+            if j[0] != 'name':
+                # name_dict['Key' + str(num)].update({j[0]: j[1]})
+                # num += 1
+                name_dict.update({'Key' + str(num) : {'name' : j[0], 'time': j[1]}})
+                num += 1
+
+        #for key in name_dict :
+        #    print(key, name_dict[key])
+
+        #phone_dict = {}
+        #num = 0
+        #for j in phones :
+        #    phone_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
+        #     num += 1
+        # pickup_dict = {}
+        # num = 0
+        # for j in pickups :
+        #     pickup_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
+        #     num += 1
+        # destination_dict = {}
+        # num = 0
+        # for j in destinations :
+        #     destination_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
+        #     num += 1
+        # time_dict = {}
+        # num = 0
+        # for j in times :
+        #     time_dict.update({'Key' + str(num) : {'name' : j[0], 'time' : j[1]}})
+        #     num += 1
 
         # title_dict = {}
         # author_dict = {}
-        # genre_dict = {}
+        # genre_dict = {}"""
 
-        no_results = name_dict == 0 and phone_dict == 0 and pickup_dict == 0 and destination_dict == 0 and time_dict == 0
-        return render_template('search.html', posting=True, query=query, no_results=no_results, name_results=name_dict, phone_results=phone_dict, pickup_results=pickup_dict, destination_results=destination_dict, time_results=time_dict)  
+        no_results = name_dict == 0# and phone_dict == 0 and pickup_dict == 0 and destination_dict == 0 and time_dict == 0
+        return render_template('search.html', posting=True, query=query, no_results=no_results, name_results=name_dict)#, phone_results=phone_dict, pickup_results=pickup_dict, destination_results=destination_dict, time_results=time_dict""")  
 
     else:
         return render_template('search.html', posting=False)
@@ -110,8 +150,8 @@ def add():
         #    return render_template('add.html', alert="exists")
         else:
             # books.insert(new_data)
-            values = (str(new_data['name']), str(new_data['phone']), str(new_data['pickup']), str(new_data['destination']), str(new_data['time']))
-            SQL on conn """insert into rides(name, phone, pickup, destination, time) values"""values
+            values = (str(new_data['name']), str(new_data['phone']), str(new_data['pickup']), str(new_data['destination']), str(new_data['time']), str('N/A'))
+            SQL on conn """insert into rides(name, phone, pickup, destination, time, driver) values"""values
             return render_template('add.html', alert = "success")
     else:
         return render_template('add.html', alert="")
